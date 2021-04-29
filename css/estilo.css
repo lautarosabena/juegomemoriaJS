@@ -1,0 +1,85 @@
+body,html{
+    text-align: center;
+    
+    color: rgb(255, 174, 0);
+    margin: 0;
+    padding: 0;
+    background: rgb(31, 30, 30);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.content{
+    margin: auto;
+    margin-top: 0px;
+    padding: 10px;
+    width: calc(100% - 20px);
+    max-width: 680px;
+}
+.text{
+    width: 100%;
+    color: rgb(184, 0, 0);
+    text-align: center;
+    font-size: 40px;
+}
+.s1{
+    margin-top: 10px;
+    font-size: 18px;
+    color: rgb(255, 174, 0);
+}
+.s2{
+    margin: 4px 0;
+    font-size: 15px;
+    color: rgb(184, 0, 0);
+    font-weight: bold;
+}
+.divTablero{
+    display: table;
+    width: 100%;
+}
+.blocks{
+    display: inline-table;
+    padding: 5px;
+    width: calc(25% - 14px);
+    background: #fff;
+    border: 2px solid rgb(131, 32, 32);
+    width: 144px;
+    height: 168px;
+}
+.content-block{
+    width: 100%;
+    transform: rotateY(90deg);
+    transition: 0.5s;
+    
+}
+.content-block img{
+    width: 100%;	
+    width: 144px;
+    height: 168px;		
+}
+#boton{
+    position: absolute;			
+    font-size:13px;    
+    font-weight:bold;    
+    border-radius: 10%;
+    border-color: rgb(184, 0, 0);
+    width:130px;
+    height: 35px;	
+}
+#divGanaste{
+    color:black;
+    background-color: chartreuse;
+}
+#divPerdiste{
+    color:white;
+    background-color: red;
+}
+#nombreUsuario{
+    margin-top: 10px;
+    font-weight: bolder;
+    font-size: 15px;
+    color: rgb(255, 174, 0);
+    background-color: rgb(184, 0, 0);
+}
+#imgAFA{
+    height: 800px;
+    width: 640px;
+}

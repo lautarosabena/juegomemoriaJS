@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Juego de la memoria AFA</title>
+	<link rel="stylesheet" href="css/estilo.css">	
+</head>
+<body >
+	<div class="content">
+		<div class="text">Juego de la Memoria (Clubes AFA)</div>
+		<div id="divInput">Ingrese su nombre: <input type="text" id="nombreUsuario"> <input type="button" value="Jugar" id="boton" onclick="validarNombre()"></div>
+		<img src="img/afa.png" alt="Escudo AFA" id="imgAFA">
+		<div class="text s1" id="s1"></div>
+		<div class="text s2" id="s2"></div>
+		<div class="text"><span id="divGanaste"></span></div>
+		<div class="text"><span id="divPerdiste"></span></div>
+		<div class="divTablero" id="idTablero" style="display: none;"></div>
+	</div>
+	<script type="text/javascript">
+	
+	function validarNombre(){
+		var vNombreUsuario = document.getElementById("nombreUsuario").value;
+		if(vNombreUsuario.trim() != ''){
+			empezarJuego();
+		} else
+		alert("Ingrese un nombre.");
+	}	
+	function empezarJuego(){
+		document.getElementById("divInput").style.display='none';
+		document.getElementById('imgAFA').style.display='none';
+		var vTablero=document.getElementById("idTablero");
+		vTablero.style.display='';
+		var vNombreUsuario = document.getElementById("nombreUsuario").value;
+		document.getElementById('s1').innerHTML= "Hola " + vNombreUsuario +"! Intenta encontrar los pares de cada imagen. Tenés 20 intentos!"
+		var vContadorIntentos=0;
+		var vContadorAciertos=0;
+		document.getElementById('s2').innerHTML= "Número de intentos: " + vContadorIntentos + "    Número de aciertos: " + vContadorAciertos;
+		var divGanar= document.getElementById("divGanaste");
+		divGanar.style.display = 'none';
+		var divPerder= document.getElementById("divPerdiste");
+		divPerder.style.display = 'none';		
+		var vArrayImagenes=[];
+		var vCantidadImagenes=8;
+		for (var i = 0; i < vCantidadImagenes; i++) {
+			vArrayImagenes.push(i+1);
+			vArrayImagenes.push(i+1);
+		}		
+		var html='';
+		var vContador=1;
+		while(vArrayImagenes.length>0){
+			var vArrayNuevo=[];
+			if (vArrayImagenes.length==1) {
+				html+=
+				'<div class="blocks">'+
+					'<div class="content-block" data-partner="'+vArrayImagenes[0]+'" data-clicked="0" data-enc="0" id="'+vContador+'">'+
+						'<img src="img/'+vArrayImagenes[0]+'.png"/>'
+					'</div>'+
+				'</div>';
+			}else{
+				var vIndex=Math.round(Math.random()*vArrayImagenes.length)+1;
+				for (var i = 0; i < vArrayImagenes.length; i++) {
+					if (i==vIndex) {
+						html+=
+						'<div class="blocks">'+
+							'<div class="content-block" data-partner="'+vArrayImagenes[i]+'" data-clicked="0" data-enc="0" id="'+vContador+'">'+
+								'<img src="img/'+vArrayImagenes[i]+'.png">'+
+							'</div>'+
+						'</div>';
+					}else{
+						vArrayNuevo.push(vArrayImagenes[i]);
+					}
+				}
+			}
+			vArrayImagenes=[];
+			vArrayImagenes=vArrayNuevo;
+			vContador++;
+		}
+		vTablero.innerHTML=html;
+		var vArrInicial=document.getElementsByClassName("blocks");
+		var vIdImgAnterior=0;
+		var vContadorClicks=0;
+		var vImgAnterior=0;		
+		var vValidarClick=true;
+	
+		function inicio(){
+			if (vValidarClick) {
+				var vElement=this.getElementsByClassName("content-block")[0];
+				if(vElement.id!=vIdImgAnterior && vElement.dataset.enc!="1"){
+					vElement.dataset.clicked="1";
+					vElement.style.transform="rotateY(0deg)";
+					if (vContadorClicks==0) {
+						vImgAnterior=vElement.dataset.partner;
+						vIdImgAnterior=vElement.id;
+						vContadorClicks++;
+					}else{
+						vValidarClick=false;
+						setTimeout(function(){
+							var vDomElement=document.getElementsByClassName("content-block");
+							if (vImgAnterior==vElement.dataset.partner) {
+								vContadorAciertos++;								
+								for (var i = 0; i < vDomElement.length; i++) {
+									if (vDomElement[i].dataset.clicked=="1") {
+										vDomElement[i].dataset.enc="1"
+									}
+								}
+								if (vCantidadImagenes==vContadorAciertos) {									
+									divGanar.style.display='';
+									document.getElementById("divGanaste").innerHTML = "Felicitaciones " +vNombreUsuario+ ". GANASTE!" + "<button type='button' id='boton' onclick='empezarJuego()''>Jugar de Nuevo</button>"
+									
+								}
+								
+							}else{
+								for (var i = 0; i < vDomElement.length; i++) {
+									if (vDomElement[i].dataset.enc=="0") {
+										vDomElement[i].style.transform="rotateY(90deg)";
+										vDomElement[i].dataset.clicked="0";
+									}
+								}
+							}
+							
+							vContadorClicks=0;
+							vImgAnterior=0;
+							vContadorIntentos++;
+							if(vContadorIntentos == 20 && vContadorAciertos!=8){
+								detenerJuego();				
+							}
+							vIdImgAnterior=0;
+							vValidarClick=true;
+							document.getElementById('s2').innerHTML= "Número de intentos: " + vContadorIntentos + "Número de aciertos: " + vContadorAciertos;
+						},500);
+					}
+				}
+			}
+		}
+		
+		for (var i = 0; i < vArrInicial.length; i++) {
+			vArrInicial[i].addEventListener('click',inicio,false);
+		}
+	}
+	function detenerJuego(){
+		var vNombreUsuario = document.getElementById("nombreUsuario").value;		
+		var divPerder=document.getElementById("divPerdiste");		
+		divPerder.style.display='';
+		var divTablero=document.getElementById("idTablero");
+		divPerder.innerHTML = "Que lástima " +vNombreUsuario + ". PERDISTE!" + "<button type='button' id='boton' onclick='empezarJuego()''>Jugar de Nuevo</button>"
+		divTablero.style.display = 'none';
+
+	}	
+	</script>
+</body>
+</html>
